@@ -5,7 +5,7 @@ def test_register_and_login_ok(client):
     r = client.post("/register", data={"username": "ana", "password": "1234"}, follow_redirects=False)
     assert r.status_code in (303, 307)
 
-    # Login ok (ya lo tenías sin seguir redirects)
+    # Login ok
     r2 = client.post("/login", data={"username": "ana", "password": "1234"}, follow_redirects=False)
     assert r2.status_code in (303, 307)
     assert "session_user=ana" in r2.headers.get("set-cookie", "")
