@@ -1,0 +1,25 @@
+[project]
+name = "mi-proyecto"
+version = "0.1.0"
+
+# Declaramos qué paquetes Python formarán parte de la distribución.
+# Cada "include" es un directorio con un __init__.py.
+packages = [
+    # Incluye la carpeta 'scraper' como paquete Python
+    { include = "scraper" },
+
+    # Incluye la carpeta 'utils'
+    { include = "utils" },
+
+    # Incluye el paquete 'api' y todos sus subpaquetes
+    { include = "api" }
+]
+
+src/
+    mi_modulo/
+
+[project]
+packages = [
+    # 'from src import mi_modulo'
+    { include = "mi_modulo", from = "src" }
+]
