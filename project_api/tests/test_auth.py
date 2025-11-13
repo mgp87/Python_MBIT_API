@@ -1,19 +1,19 @@
 import pytest
 
-def test_register_and_login_ok(client):
+def test_register_and_login_ok(client_auth):
     # NO seguir redirecciones aquí
-    r = client.post("/register", data={"username": "ana", "password": "1234"}, follow_redirects=False)
+    r = client_auth.post("/register", data={"username": "ana", "password": "1234"}, follow_redirects=False)
     assert r.status_code in (303, 307)
 
     # Login ok
-    r2 = client.post("/login", data={"username": "ana", "password": "1234"}, follow_redirects=False)
+    r2 = client_auth.post("/login", data={"username": "ana", "password": "1234"}, follow_redirects=False)
     assert r2.status_code in (303, 307)
     assert "session_user=ana" in r2.headers.get("set-cookie", "")
 
 
-def test_register_duplicate_username(client):
-    client.post("/register", data={"username": "ana", "password": "1234"})
-    r = client.post("/register", data={"username": "ana", "password": "abcd"})
+def test_register_duplicate_username(client_auth):
+    client_auth.post("/register", data={"username": "ana", "password": "1234"})
+    r = client_auth.post("/register", data={"username": "ana", "password": "abcd"})
     assert r.status_code == 400
     assert "Usuario ya existe" in r.text
 
@@ -25,8 +25,8 @@ def test_register_duplicate_username(client):
         ("pepe", "123"),         # password corto
     ],
 )
-def test_register_validation_errors(client, username, password):
-    r = client.post("/register", data={"username": username, "password": password})
+def test_register_validation_errors(client_auth, username, password):
+    r = client_auth.post("/register", data={"username": username, "password": password})
     assert r.status_code == 400
 
 @pytest.mark.parametrize(
@@ -36,11 +36,11 @@ def test_register_validation_errors(client, username, password):
         ("ana", "mala"),  # usuario real pero pass incorrecta
     ],
 )
-def test_login_invalid(client, username, password):
+def test_login_invalid(client_auth, username, password):
     # Creamos un usuario válido
-    client.post("/register", data={"username": "ana", "password": "1234"})
+    client_auth.post("/register", data={"username": "ana", "password": "1234"})
 
-    r = client.post("/login", data={"username": username, "password": password})
+    r = client_auth.post("/login", data={"username": username, "password": password})
     assert r.status_code == 400
     assert "Credenciales inválidas" in r.text
 
