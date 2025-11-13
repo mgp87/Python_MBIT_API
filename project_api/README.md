@@ -22,7 +22,7 @@ uv --version
 
 ```bash
 git clone https://github.com/mgp87/Python_MBIT_API.git
-cd Python_MBIT_API
+cd project_api
 ```
 
 ## Sincronizar deps
